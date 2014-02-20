@@ -2,6 +2,7 @@ package spring.sample.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import spring.sample.dao.AccountDao;
 import spring.sample.model.Account;
 
@@ -9,6 +10,7 @@ import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
 
+@Component
 public class AccountService {
 
     @Inject

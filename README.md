@@ -762,6 +762,58 @@ public class AccountService {
 * ConsoleApp 실행 후 결과 확인하기
 
 
+### Step09. Java based configuration
+
+
+* PersonConfig 설정 파일을 작성합니다.
+```
+package spring.sample.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import spring.sample.model.Person;
+
+@Configuration
+public class PersonConfig {
+
+    @Bean
+    public Person jaeyong() {
+        return new Person("Jaeyong", "Kim");
+    }
+
+}
+```
+
+* 기존 실행가능 파일과 겹치지 않게 ConsoleJavaConfigApp 클래스를 만들고 실행을 해봅니다.
+```
+package spring.sample;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import spring.sample.config.PersonConfig;
+import spring.sample.model.Person;
+
+public class ConsoleJavaConfigApp {
+
+    private static final Logger logger = LoggerFactory.getLogger(ConsoleJavaConfigApp.class);
+
+    public static void main(String[] args) {
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(PersonConfig.class);
+
+        Person p = ctx.getBean("jaeyong", Person.class);
+        logger.debug("jaeyong : " + p.getFirstName() + " " + p.getLastName() + "[" +  p + "]");
+
+
+        p = ctx.getBean(Person.class);
+        logger.debug("person : " + p.getFirstName() + " " + p.getLastName() + "[" +  p + "]");
+    }
+}
+
+```
+
+
 
 
 
