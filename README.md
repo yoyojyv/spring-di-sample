@@ -176,3 +176,164 @@ public class AccountService {
     </bean>
 </beans>
 ```
+
+### Step04. Domain class 작성하기
+
+* Account domain class 를 만듭니다.
+```
+package spring.sample.model;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class Account {
+
+    private String accountNo;
+    private BigDecimal balance;
+    private Date lastPaidOn;
+
+    public Account(String accountNo, BigDecimal balance, Date lastPaidOn) {
+        this.accountNo = accountNo;
+        this.balance = balance;
+        this.lastPaidOn = lastPaidOn;
+    }
+
+    public String getAccountNo() {
+        return accountNo;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public Date getLastPaidOn() {
+        return lastPaidOn;
+    }
+}
+```
+
+* AccountDao 에 interface 를 추가합니다.
+```
+public interface AccountDao {
+
+    List<Account> findAll() throws Exception;
+
+}
+```
+
+* CsvAccountDao 를 작성합니다.
+```
+package spring.sample.dao.csv;
+
+import org.springframework.core.io.Resource;
+import spring.sample.dao.AccountDao;
+import spring.sample.model.Account;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class CsvAccountDao implements AccountDao {
+
+    private Resource csvResource;
+
+    public void setCsvResource(Resource csvFile) {
+        this.csvResource = csvFile;
+    }
+
+    public List<Account> findAll() throws Exception {
+        List<Account> results = new ArrayList<Account>();
+
+        DateFormat fmt = new SimpleDateFormat("MMddyyyy");
+        BufferedReader br = new BufferedReader(
+                new FileReader(csvResource.getFile()));
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] fields = line.split(",");
+
+            String accountNo = fields[0];
+            BigDecimal balance = new BigDecimal(fields[1]);
+            Date lastPaidOn = fmt.parse(fields[2]);
+            Account account =
+                    new Account(accountNo, balance, lastPaidOn);
+            results.add(account);
+        }
+        br.close();
+        return results;
+    }
+}
+```
+
+* JdbcAccountDao 에도 findAll() 메소드를 구현합니다.
+```
+    public List<Account> findAll() throws Exception {
+        throw new UnsupportedOperationException("This method has not been implemented");
+    }
+```
+
+* 다음의 메소드를 AccountService 에 추가합니다.
+```
+    public List<Account> findDeliquentAccounts() throws Exception {
+        List<Account> delinquentAccounts = new ArrayList<Account>();
+        List<Account> accounts = accountDao.findAll();
+
+        Date thirtyDaysAgo = daysAgo(30);
+        for (Account account : accounts) {
+            boolean owesMoney = account.getBalance()
+                    .compareTo(BigDecimal.ZERO) > 0;
+            boolean thirtyDaysLate = account.getLastPaidOn()
+                    .compareTo(thirtyDaysAgo) <= 0;
+
+            if (owesMoney && thirtyDaysLate) {
+                delinquentAccounts.add(account);
+            }
+        }
+        return delinquentAccounts;
+    }
+
+    private static Date daysAgo(int days) {
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.add(Calendar.DATE, -days);
+        return gc.getTime();
+    }
+```
+
+
+* main 메소드가 있는 실행 클래스를 만들고 실행해 봅니다.
+```
+package spring.sample;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import spring.sample.model.Account;
+import spring.sample.service.AccountService;
+
+import java.util.List;
+
+public class ConsolApp {
+
+    private static final Logger logger = LoggerFactory.getLogger(ConsolApp.class);
+
+    public static void main(String[] args) throws Exception {
+
+        ApplicationContext appCtx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        AccountService accountService = appCtx.getBean("accountService", AccountService.class);
+
+        List<Account> delinquentAccounts = accountService.findDeliquentAccounts();
+
+        for (Account a : delinquentAccounts) {
+            logger.debug("" + a.getAccountNo());
+        }
+    }
+
+}
+```
+
+
