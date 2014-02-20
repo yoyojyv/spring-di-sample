@@ -1,0 +1,41 @@
+# intellij
+######################
+.idea
+*.iws
+*.iml
+.classpath
+.project
+.settings
+/*.launch
+/*.tmproj
+out/
+target/
+atlassian-ide-plugin.xml
+build/
+bin/
+.gradle
+gradle/
+gradlew
+gradlew.bat
+
+
+# logs
+######################
+stacktrace.log
+/test/reports
+
+# project release file
+######################
+*.war
+
+
+# OS generated files
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db

@@ -1,0 +1,153 @@
+apply plugin: 'java'
+apply plugin: 'war'
+
+apply plugin: 'tomcat'
+
+apply plugin: 'eclipse'
+apply plugin: 'eclipse-wtp'
+
+ext {
+    javaVersion = '1.7'
+}
+
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
+
+// 인코딩 지정
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+version = '1.0'
+
+def version = [
+        spring: '4.0.2.RELEASE'
+        , slf4j: '1.7.5'
+        , logBack: '1.0.13'
+        , servletApi: '3.0.1'
+        , springDataJpa: '1.4.3.RELEASE'
+        , mysqlConnector: '5.1.29'
+        , hsqldb: '1.8.0.10'
+]
+
+def springFrameworks = [
+        "org.springframework:spring-core:${version.spring}"
+        , "org.springframework:spring-context:${version.spring}"
+        , "org.springframework:spring-aop:${version.spring}"
+        , "org.springframework:spring-tx:${version.spring}"
+        , "org.springframework:spring-aspects:${version.spring}"
+        , "org.springframework:spring-oxm:${version.spring}"
+        , "org.springframework:spring-orm:${version.spring}"
+        , "org.springframework:spring-test:${version.spring}"
+        , "org.springframework:spring-jdbc:${version.spring}"
+        , "org.springframework:spring-web:${version.spring}"
+        , "org.springframework:spring-webmvc:${version.spring}"
+        , "org.springframework.data:spring-data-jpa:${version.springDataJpa}"
+]
+
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+
+dependencies {
+
+    /**
+     * SpringFramework: http://www.springsource.org/spring-framework
+     */
+    //compile springFrameworks //도 가능
+    springFrameworks.collect {
+        compile(it) {
+            // exclude(group: "cglib", module: "cglib")
+        }
+    }
+
+    /**
+     * SLF4j & Logback
+     * SLF4j: http://www.slf4j.org/
+     * Logback: http://logback.qos.ch/
+     */
+    compile "org.slf4j:slf4j-api:${version.slf4j}"
+    runtime "org.slf4j:jcl-over-slf4j:${version.slf4j}"
+    runtime "org.slf4j:log4j-over-slf4j:${version.slf4j}"
+    compile "ch.qos.logback:logback-classic:${version.logBack}"
+
+    runtime(
+
+            // mysql jdbc
+            "mysql:mysql-connector-java:${version.mysqlConnector}",
+
+            // hsqldb
+            "org.hsqldb:hsqldb:${version.hsqldb}",
+
+    )
+
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+
+    /**
+     * Logback을 사용하기 때문에 모든 의존성 라이브러리에서 common-logging는 제외
+     */
+    [configurations.runtime, configurations.default]*.exclude(module: 'commons-logging')
+
+    // tomcat plugin
+    def tomcatVersion = '7.0.11'
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
+    tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
+        exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
+    }
+
+}
+
+// ==================================================
+// 톰캣 플러그인을 쓸때 다음의 내용을 넣어주어야 함
+// See: https://github.com/bmuschko/gradle-tomcat-plugin
+// ==================================================
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.0'
+    }
+}
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.10'
+}
+
+
+// source, resources directory 생성
+task initProject(description: 'initialize project') << {
+    createDir = {
+        println "create source directory: $it"
+        it.mkdirs()
+    }
+    sourceSets*.java.srcDirs*.each createDir
+    sourceSets*.resources.srcDirs*.each createDir
+}
+
+
+
+eclipse {
+    classpath {
+        downloadSources = true
+        downloadJavadoc = false
+        defaultOutputDir = file("${buildDir}/classes/main")
+    }
+    wtp {
+        component {
+            contextPath = "/"
+        }
+        facet {
+            facet name: 'jst.web', version: '3.0' // Servlet Spec Version 지정
+            facet name: 'jst.java', version: '1.7' // Java Version 지정
+        }
+    }
+}
+
+tasks.eclipse.dependsOn cleanEclipse
