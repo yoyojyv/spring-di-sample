@@ -269,6 +269,14 @@ public class CsvAccountDao implements AccountDao {
 }
 ```
 
+* applicationContext 에 다음의 내용 추가
+```
+    <bean id="accountDao"
+       class="com.springinpractice.ch01.dao.csv.CsvAccountDao">
+        <property name="csvResource" value="accounts.csv"/>
+    </bean>
+```
+
 * JdbcAccountDao 에도 findAll() 메소드를 구현합니다.
 ```
     public List<Account> findAll() throws Exception {
