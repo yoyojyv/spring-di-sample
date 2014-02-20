@@ -67,4 +67,67 @@ public class JdbcAccountDao implements AccountDao {
 ```
 
 
+### Step02. 간단한 DAO 작성하기2 - DI 적용하기, 비즈니스로직 추가하기
+
+* JdbcAccountDao 를 수정합니다.
+```
+public class JdbcAccountDao implements AccountDao {
+
+    private DataSource dataSource;
+
+    public JdbcAccountDao() {}
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+}
+```
+
+* AccountService 를 추가합니다. (비즈니스로직)
+```
+package spring.sample.service;
+
+import org.apache.commons.dbcp.BasicDataSource;
+import spring.sample.dao.JdbcAccountDao;
+
+import java.io.InputStream;
+import java.util.Properties;
+
+public class AccountService {
+    private JdbcAccountDao accountDao;
+
+    public AccountService() {
+        try {
+            Properties props = new Properties();
+            InputStream inputStream = this.getClass().getClassLoader()
+                    .getResourceAsStream("dataSource.properties");
+            props.load(inputStream);
+
+            BasicDataSource dataSource = new BasicDataSource();
+            dataSource.setDriverClassName(
+                    props.getProperty("driverClassName"));
+            dataSource.setUrl(props.getProperty("url"));
+            dataSource.setUsername(props.getProperty("username"));
+            dataSource.setPassword(props.getProperty("password"));
+
+            accountDao = new JdbcAccountDao();
+            accountDao.setDataSource(dataSource);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+```
+
+* dataSource.properties 파일을 추가합니다.
+```
+driverClassName=com.mysql.jdbc.Driver
+url=:mysql://localhost:3306/spring-study-db?autoReconnect=true
+username=root
+password=1234
+```
+
+
+
 
