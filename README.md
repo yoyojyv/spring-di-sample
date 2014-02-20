@@ -337,3 +337,38 @@ public class ConsolApp {
 ```
 
 
+### Step05. properties 설정 읽어오기
+
+* properties 파일을 만듭니다.
+```
+dataSource.driverClassName=com.mysql.jdbc.Driver
+dataSource.url=:mysql://localhost:3306/spring-study-db?autoReconnect=true
+dataSource.username=root
+dataSource.password=1234
+mailSender.host=mail.sample.com
+recaptcha.publicKey=get_one_from_recaptcha_website
+recaptcha.privateKey=get_one_from_recaptcha_website
+```
+
+* applicationContext.xml 파일을 수정합니다. 밑의 소스를 넣어주세요.
+```
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="springSample.properties"/>
+    </bean>
+
+    <bean id="dataSource"
+          class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName"
+                  value="${dataSource.driverClassName}"/>
+        <property name="url" value="${dataSource.url}"/>
+        <property name="username" value="${dataSource.username}"/>
+        <property name="password" value="${dataSource.password}"/>
+    </bean>
+```
+
+
+
+
+
+
