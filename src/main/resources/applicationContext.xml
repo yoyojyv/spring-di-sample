@@ -2,31 +2,28 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!--&lt;!&ndash; dataSource &ndash;&gt;-->
-    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"-->
-          <!--destroy-method="close">-->
-        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
-        <!--<property name="url"-->
-                  <!--value="jdbc:mysql://localhost:3306/spring-study-db?autoReconnect=true"/>-->
-        <!--<property name="username" value="root"/>-->
-        <!--<property name="password" value="1234"/>-->
-    <!--</bean>-->
-
-    <!--&lt;!&ndash; dao &ndash;&gt;-->
-    <!--<bean id="accountDao"-->
-          <!--class="spring.sample.dao.jdbc.JdbcAccountDao">-->
-        <!--<property name="dataSource" ref="dataSource"/>-->
-    <!--</bean>-->
-
-    <!-- dao -->
-    <bean id="accountDao"
-          class="spring.sample.dao.csv.CsvAccountDao">
-        <property name="csvResource" value="accounts.csv"/>
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="springSample.properties"/>
     </bean>
 
-    <!-- service -->
     <bean id="accountService"
           class="spring.sample.service.AccountService">
         <property name="accountDao" ref="accountDao"/>
     </bean>
+
+    <bean id="accountDao"
+          class="spring.sample.dao.jdbc.JdbcAccountDao">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="dataSource"
+          class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName"
+                  value="${dataSource.driverClassName}"/>
+        <property name="url" value="${dataSource.url}"/>
+        <property name="username" value="${dataSource.username}"/>
+        <property name="password" value="${dataSource.password}"/>
+    </bean>
+
 </beans>
