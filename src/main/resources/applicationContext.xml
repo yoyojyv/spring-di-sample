@@ -33,7 +33,7 @@
     <!-- accountDao 가 2개 -->
     <bean id="csvAccountDao"
           class="spring.sample.dao.csv.CsvAccountDao">
-          <property name="csvResource" />
+        <property name="csvResource" value="accounts.csv"/>
     </bean>
 
     <bean id="jdbcAccountDao"
