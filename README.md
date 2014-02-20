@@ -708,6 +708,59 @@ AccountService 에서 @Autowired 부분에 @Qualifier("csvAccountDao") 추가
 * ConsoleApp 실행 후 결과 확인하기
 
 
+### Step08. stereotype annotation
+
+* JdbcAccountDao class 바로 위쪽에 @Component annotaion 을 붙여줌, @Autowired 로 DI 적용
+
+```
+@Component
+public class JdbcAccountDao implements AccountDao {
+    ...
+
+    @Autowired
+    private NamedParameterJdbcOperations jdbcTemplate;
+
+    @Autowired
+    private AccountRowMapper accountRowMapper;
+
+    ...
+    ...
+
+}
+```
+
+* AccountService 쪽에서 @Qualifier("csvAccountDao") annotation 부분 제거
+```
+public class AccountService {
+
+    @Autowired
+    private AccountDao accountDao;
+
+    ...
+    ...
+
+}
+```
+
+* ConsoleApp 실행 후 결과 확인하기
+
+
+* @Autowired 대신 @Inject 를 이용해도 됨
+
+```
+public class AccountService {
+
+    @Inject
+    private AccountDao accountDao;
+
+    ...
+    ...
+
+}
+```
+
+* ConsoleApp 실행 후 결과 확인하기
+
 
 
 

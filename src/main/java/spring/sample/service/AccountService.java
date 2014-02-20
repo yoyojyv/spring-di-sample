@@ -5,13 +5,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import spring.sample.dao.AccountDao;
 import spring.sample.model.Account;
 
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
 
 public class AccountService {
 
-    @Autowired
-    @Qualifier("csvAccountDao")
+    @Inject
     private AccountDao accountDao;
 
     public AccountService() {}

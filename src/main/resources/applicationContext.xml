@@ -1,13 +1,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:c="http://www.springframework.org/schema/c"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
        ">
 
-    <context:annotation-config/>
+    <context:component-scan base-package="spring.sample" />
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location" value="springSample.properties"/>
@@ -29,47 +28,10 @@
           class="spring.sample.service.AccountService">
     </bean>
 
-
-    <!-- accountDao 가 2개 -->
-    <bean id="csvAccountDao"
-          class="spring.sample.dao.csv.CsvAccountDao">
-        <property name="csvResource" value="accounts.csv"/>
-    </bean>
-
-    <bean id="jdbcAccountDao"
-          class="spring.sample.dao.jdbc.JdbcAccountDao">
-        <property name="jdbcTemplate" ref="jdbcTemplate" />
-        <property name="accountRowMapper" ref="accountRowMapper"/>
-    </bean>
-
-
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
         <constructor-arg ref="dataSource"/>
     </bean>
 
     <bean id="accountRowMapper" class="spring.sample.dao.jdbc.AccountRowMapper" />
-
-
-    <!-- person -->
-    <bean id="jaeyong" class="spring.sample.model.Person" scope="prototype">
-        <constructor-arg value="Jaeyong" />
-        <constructor-arg value="Kim" />
-    </bean>
-
-    <bean id="yongsub" class="spring.sample.model.Person"
-          c:firstName="Yongsub"
-          c:lastName="Byun"
-            />
-
-    <bean id="minchan" class="spring.sample.model.Person"
-          c:_0="Minchan"
-          c:_1="Kim"
-            />
-
-    <bean id="yuri" class="spring.sample.model.Person"
-          p:firstName="Yuri"
-          p:lastName="Lee"
-            />
-
 
 </beans>

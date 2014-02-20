@@ -25,26 +25,6 @@ public class ConsoleApp {
             logger.debug("delinquentAccount : " + a.getAccountNo());
         }
 
-        logger.debug("--------------------------------");
-        Person p = appCtx.getBean("jaeyong", Person.class);
-        logger.debug("jaeyong : " + p.getFirstName() + " " + p.getLastName() + "[" +  p + "]");
-
-        p = appCtx.getBean("yongsub", Person.class);
-        logger.debug("yongsub : " + p.getFirstName() + " " + p.getLastName() + "[" +  p + "]");
-
-        p = appCtx.getBean("minchan", Person.class);
-        logger.debug("minchan : " + p.getFirstName() + " " + p.getLastName() + "[" +  p + "]");
-
-        p = appCtx.getBean("yuri", Person.class);
-        logger.debug("yuri : " + p.getFirstName() + " " + p.getLastName() + "[" +  p + "]");
-
-        p = appCtx.getBean("jaeyong", Person.class);
-
-        Person jaeyong = appCtx.getBean("jaeyong", Person.class);
-        logger.debug("jaeyong : " + jaeyong.getFirstName() + " " + jaeyong.getLastName() + "[" +  jaeyong + "]");
-
-        logger.debug(" p == jaeyong -> " + ( p == jaeyong) );
-
     }
 
 }
