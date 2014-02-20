@@ -129,5 +129,55 @@ password=1234
 ```
 
 
+### Step03. DAO, 비즈니스로직 DI 적용하기
+
+* AccountService 를 수정합니다.
+```
+public class AccountService {
+    private AccountDao accountDao;
+
+    public AccountService() {}
+
+    public void setAccountDao(AccountDao accountDao) {
+        this.accountDao = accountDao;
+    }
+
+}
+```
+
+* applicationContext.xml 파일을 만듭니다.
+```
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        ">
+
+    <!-- dataSource -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url"
+                  value="jdbc:mysql://localhost:3306/spring-study-db?autoReconnect=true"/>
+        <property name="username" value="root"/>
+        <property name="password" value="1234"/>
+    </bean>
+
+    <!-- dao -->
+    <bean id="accountDao"
+          class="spring.sample.dao.jdbc.JdbcAccountDao">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- service -->
+    <bean id="accountService"
+          class="spring.sample.service.AccountService">
+        <property name="accountDao" ref="accountDao"/>
+    </bean>
+</beans>
+```
+
+
+
 
 
