@@ -46,6 +46,11 @@ public interface AccountDao {
 
 * JdbcAccountDao.java
 ```
+package spring.sample.dao.jdbc;
+
+import org.apache.commons.dbcp.BasicDataSource;
+import spring.sample.dao.AccountDao;
+
 public class JdbcAccountDao implements AccountDao {
     private BasicDataSource dataSource;
 
