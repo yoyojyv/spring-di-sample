@@ -1,5 +1,6 @@
 package spring.sample.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import spring.sample.dao.AccountDao;
 import spring.sample.model.Account;
 
@@ -7,6 +8,8 @@ import java.math.BigDecimal;
 import java.util.*;
 
 public class AccountService {
+
+    @Autowired
     private AccountDao accountDao;
 
     public AccountService() {}

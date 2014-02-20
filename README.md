@@ -634,6 +634,43 @@ public class Person {
 
 
 
+### Step07. autowiring and component scan using annotations
 
+
+* AccountService 의 accountDao 에 다음의 annotation 을 추가 함
+```
+public class AccountService {
+
+    @Autowired
+    private AccountDao accountDao;
+
+    ...
+    ...
+
+}
+```
+
+
+* applicationContext.xml 파일에 context namespace 를 추가, <context:annotation-config/> 추가
+```
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       ">
+
+    <context:annotation-config/>
+```
+
+* accountService 부분을 다음과 같이 변경
+```
+    <bean id="accountService"
+          class="spring.sample.service.AccountService" />
+```
+
+* ConsoleApp 실행 후 결과 확인하기
 
 
