@@ -317,9 +317,9 @@ import spring.sample.service.AccountService;
 
 import java.util.List;
 
-public class ConsolApp {
+public class ConsoleApp {
 
-    private static final Logger logger = LoggerFactory.getLogger(ConsolApp.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConsoleApp.class);
 
     public static void main(String[] args) throws Exception {
 
