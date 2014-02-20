@@ -32,7 +32,7 @@ github [https://github.com/springinpractice]
 * 먼저 build.gradle 파일에 dependency 를 추가합니다.
 ```
 compile(
-    "commons-dbcp:commons-dbcp:${version.commonDbcpVersion}"
+    "commons-dbcp:commons-dbcp:${version.commonDbcp}"
 )
 ```
 
