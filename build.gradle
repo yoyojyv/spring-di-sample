@@ -26,7 +26,7 @@ def version = [
         , springDataJpa: '1.4.3.RELEASE'
         , mysqlConnector: '5.1.29'
         , hsqldb: '1.8.0.10'
-        , commonDbcpVersion: '1.4'
+        , commonDbcp: '1.4'
 ]
 
 def springFrameworks = [
@@ -74,7 +74,7 @@ dependencies {
     compile "ch.qos.logback:logback-classic:${version.logBack}"
 
     compile(
-            "commons-dbcp:commons-dbcp:${version.commonDbcpVersion}"
+            "commons-dbcp:commons-dbcp:${version.commonDbcp}"
     )
 
     runtime(
