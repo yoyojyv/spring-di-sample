@@ -13,6 +13,10 @@ Java는 1.7 기준입니다.
 gradle wrapper
 ./gradlew check
 ./gradlew initProject
-./gradlew eclipse
 ```
 
+* eclipse 를 사용하는 경우
+```
+./gradlew eclipse
+```
+다음으로 IDE 에서 프로젝트를 import 함
