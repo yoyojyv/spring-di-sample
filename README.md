@@ -46,10 +46,6 @@ public interface AccountDao {
 
 * JdbcAccountDao.java
 ```
-package spring.sample.dao;
-
-import org.apache.commons.dbcp.BasicDataSource;
-
 public class JdbcAccountDao implements AccountDao {
     private BasicDataSource dataSource;
 
@@ -59,7 +55,7 @@ public class JdbcAccountDao implements AccountDao {
         dataSource.setUrl("jdbc:mysql://localhost:3306/spring-study-db" +
                 "?autoReconnect=true");
         dataSource.setUsername("root");
-        dataSource.setPassword("");
+        dataSource.setPassword("1234");
     }
 
 }
