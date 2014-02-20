@@ -57,7 +57,7 @@ public class JdbcAccountDao implements AccountDao {
     public JdbcAccountDao() {
         dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/spring-study-db" +
+        dataSource.setUrl("jdbc:mysql://localhost:3306/spring_study_db" +
                 "?autoReconnect=true");
         dataSource.setUsername("root");
         dataSource.setPassword("1234");
@@ -123,7 +123,7 @@ public class AccountService {
 * dataSource.properties 파일을 추가합니다.
 ```
 driverClassName=com.mysql.jdbc.Driver
-url=:mysql://localhost:3306/spring-study-db?autoReconnect=true
+url=:mysql://localhost:3306/spring_study_db?autoReconnect=true
 username=root
 password=1234
 ```
@@ -158,7 +158,7 @@ public class AccountService {
           destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="url"
-                  value="jdbc:mysql://localhost:3306/spring-study-db?autoReconnect=true"/>
+                  value="jdbc:mysql://localhost:3306/spring_study_db?autoReconnect=true"/>
         <property name="username" value="root"/>
         <property name="password" value="1234"/>
     </bean>
@@ -342,7 +342,7 @@ public class ConsolApp {
 * properties 파일을 만듭니다.
 ```
 dataSource.driverClassName=com.mysql.jdbc.Driver
-dataSource.url=:mysql://localhost:3306/spring-study-db?autoReconnect=true
+dataSource.url=:mysql://localhost:3306/spring_study_db?autoReconnect=true
 dataSource.username=root
 dataSource.password=1234
 mailSender.host=mail.sample.com
