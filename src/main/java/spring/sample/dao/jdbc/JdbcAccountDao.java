@@ -9,7 +9,7 @@ public class JdbcAccountDao implements AccountDao {
     public JdbcAccountDao() {
         dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/spring-study-db" +
+        dataSource.setUrl("jdbc:mysql://localhost:3306/spring_study_db" +
                 "?autoReconnect=true");
         dataSource.setUsername("root");
         dataSource.setPassword("1234");
