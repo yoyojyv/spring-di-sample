@@ -745,7 +745,7 @@ public class AccountService {
 * ConsoleApp 실행 후 결과 확인하기
 
 
-* @Autowired 대신 @Inject 를 이용해도 됨
+* @Autowired 대신 @Inject 를 이용해도 됨 - jsr330
 
 ```
 public class AccountService {
