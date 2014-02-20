@@ -21,7 +21,7 @@ public class ConsolApp {
         List<Account> delinquentAccounts = accountService.findDeliquentAccounts();
 
         for (Account a : delinquentAccounts) {
-            logger.debug("" + a.getAccountNo());
+            logger.debug("delinquentAccount : " + a.getAccountNo());
         }
     }
 
