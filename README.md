@@ -38,7 +38,7 @@ compile(
 
 * AccountDao.java 파일 작성
 ```
-package spring.sample;
+package spring.sample.dao;
 
 public interface AccountDao {
 }
@@ -46,7 +46,7 @@ public interface AccountDao {
 
 * JdbcAccountDao.java
 ```
-package spring.sample;
+package spring.sample.dao;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
@@ -64,8 +64,6 @@ public class JdbcAccountDao implements AccountDao {
 
 }
 ```
-
-
 
 
 

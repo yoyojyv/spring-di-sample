@@ -1,4 +1,4 @@
-package spring.sample;
+package spring.sample.dao;
 
 public interface AccountDao {
 }

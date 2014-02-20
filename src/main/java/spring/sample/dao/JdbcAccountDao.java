@@ -1,4 +1,4 @@
-package spring.sample;
+package spring.sample.dao;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
