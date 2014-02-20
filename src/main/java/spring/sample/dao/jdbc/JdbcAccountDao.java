@@ -1,23 +1,29 @@
 package spring.sample.dao.jdbc;
 
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import spring.sample.dao.AccountDao;
 import spring.sample.model.Account;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 public class JdbcAccountDao implements AccountDao {
 
-    private DataSource dataSource;
+    private static final String FIND_ALL_SQL = "SELECT * FROM Account";
 
-    public JdbcAccountDao() {}
+    private NamedParameterJdbcOperations jdbcTemplate;
 
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
+    private AccountRowMapper accountRowMapper;
+
+    public void setJdbcTemplate(NamedParameterJdbcOperations jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public void setAccountRowMapper(AccountRowMapper accountRowMapper) {
+        this.accountRowMapper = accountRowMapper;
     }
 
     public List<Account> findAll() throws Exception {
-        throw new UnsupportedOperationException("This method has not been implemented");
+        return jdbcTemplate.query(FIND_ALL_SQL, accountRowMapper);
     }
 
 }

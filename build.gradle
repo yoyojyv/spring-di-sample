@@ -27,6 +27,7 @@ def version = [
         , mysqlConnector: '5.1.29'
         , hsqldb: '1.8.0.10'
         , commonDbcp: '1.4'
+        , javaxInject: '1'
 ]
 
 def springFrameworks = [
@@ -74,7 +75,8 @@ dependencies {
     compile "ch.qos.logback:logback-classic:${version.logBack}"
 
     compile(
-            "commons-dbcp:commons-dbcp:${version.commonDbcp}"
+            "commons-dbcp:commons-dbcp:${version.commonDbcp}",
+            "javax.inject:javax.inject:${version.javaxInject}"
     )
 
     runtime(
