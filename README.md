@@ -367,7 +367,7 @@ recaptcha.privateKey=get_one_from_recaptcha_website
     </bean>
 ```
 
-### Step06. JDBC 연결하기
+### Step06. JDBC 연결하기, 빈 와이어링
 
 * DB, 테이블 생성, 데이터 넣기
 ```
@@ -596,17 +596,44 @@ public class Person {
             />
 ```
 
-* ConsoleApp
+* ConsoleApp 에 다음의 내용 추가
 ```
+        logger.debug("--------------------------------");
+        Person p = appCtx.getBean("jaeyong", Person.class);
+        logger.debug("jaeyong : " + p.getFirstName() + " " + p.getLastName() + "[" +  p + "]");
+
+        p = appCtx.getBean("yongsub", Person.class);
+        logger.debug("yongsub : " + p.getFirstName() + " " + p.getLastName() + "[" +  p + "]");
+
+        p = appCtx.getBean("minchan", Person.class);
+        logger.debug("minchan : " + p.getFirstName() + " " + p.getLastName() + "[" +  p + "]");
+
+        p = appCtx.getBean("yuri", Person.class);
+        logger.debug("yuri : " + p.getFirstName() + " " + p.getLastName() + "[" +  p + "]");
+
+        p = appCtx.getBean("jaeyong", Person.class);
+
+        Person jaeyong = appCtx.getBean("jaeyong", Person.class);
+        logger.debug("jaeyong : " + jaeyong.getFirstName() + " " + jaeyong.getLastName() + "[" +  jaeyong + "]");
+
+        logger.debug(" p == jaeyong -> " + ( p == jaeyong) );
 ```
 
+* ConsoleApp 실행 후 결과 확인하기
+
+
+* id 가 jaeyong 인 빈의 scope를 prototype으로 수정
+```
+    <bean id="jaeyong" class="spring.sample.model.Person" scope="prototype">
+        <constructor-arg value="Jaeyong" />
+        <constructor-arg value="Kim" />
+    </bean>
+```
+
+* ConsoleApp 실행 후 결과 확인하기
 
 
 
 
 
 
-
-
-
- scope="prototype"

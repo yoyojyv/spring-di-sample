@@ -39,7 +39,7 @@
 
 
     <!-- person -->
-    <bean id="jaeyong" class="spring.sample.model.Person">
+    <bean id="jaeyong" class="spring.sample.model.Person" scope="prototype">
         <constructor-arg value="Jaeyong" />
         <constructor-arg value="Kim" />
     </bean>
