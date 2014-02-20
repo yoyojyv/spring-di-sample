@@ -272,7 +272,7 @@ public class CsvAccountDao implements AccountDao {
 * applicationContext 에 다음의 내용 추가
 ```
     <bean id="accountDao"
-       class="com.springinpractice.ch01.dao.csv.CsvAccountDao">
+       class="spring.sample.dao.csv.CsvAccountDao">
         <property name="csvResource" value="accounts.csv"/>
     </bean>
 ```
