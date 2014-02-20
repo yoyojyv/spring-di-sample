@@ -123,7 +123,7 @@ public class AccountService {
 * dataSource.properties 파일을 추가합니다.
 ```
 driverClassName=com.mysql.jdbc.Driver
-url=:mysql://localhost:3306/spring_study_db?autoReconnect=true
+url=jdbc:mysql://localhost:3306/spring_study_db?autoReconnect=true
 username=root
 password=1234
 ```
@@ -342,7 +342,7 @@ public class ConsolApp {
 * properties 파일을 만듭니다.
 ```
 dataSource.driverClassName=com.mysql.jdbc.Driver
-dataSource.url=:mysql://localhost:3306/spring_study_db?autoReconnect=true
+dataSource.url=jdbc:mysql://localhost:3306/spring_study_db?autoReconnect=true
 dataSource.username=root
 dataSource.password=1234
 mailSender.host=mail.sample.com
