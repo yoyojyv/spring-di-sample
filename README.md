@@ -317,9 +317,9 @@ import spring.sample.service.AccountService;
 
 import java.util.List;
 
-public class ConsolApp {
+public class ConsoleApp {
 
-    private static final Logger logger = LoggerFactory.getLogger(ConsolApp.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConsoleApp.class);
 
     public static void main(String[] args) throws Exception {
 
@@ -367,8 +367,246 @@ recaptcha.privateKey=get_one_from_recaptcha_website
     </bean>
 ```
 
+### Step06. JDBC 연결하기
+
+* DB, 테이블 생성, 데이터 넣기
+```
+-- create database
+-- CREATE DATABASE spring_study_db DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_unicode_ci;
+
+-- create table
+CREATE TABLE `Account` (
+  `accountNo` varchar(20) NOT NULL,
+  `balance` bigint(20) NOT NULL,
+  `lastPaidOn` datetime NOT NULL,
+  PRIMARY KEY (`accountNo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+BEGIN;
+INSERT INTO `Account` VALUES ('100', '0', '2008-09-01 00:00:00'), ('200', '100', '2008-08-01 00:00:00'), ('300', '-100', '2008-09-01 00:00:00');
+COMMIT;
+```
+
+* Account domain 변경
+```
+package spring.sample.model;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class Account {
+
+    private String accountNo;
+    private BigDecimal balance;
+    private Date lastPaidOn;
+
+    public Account() {}
+
+    public Account(String accountNo, BigDecimal balance, Date lastPaidOn) {
+        this.accountNo = accountNo;
+        this.balance = balance;
+        this.lastPaidOn = lastPaidOn;
+    }
+
+    public String getAccountNo() {
+        return accountNo;
+    }
+
+    public void setAccountNo(String accountNo) {
+        this.accountNo = accountNo;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public Date getLastPaidOn() {
+        return lastPaidOn;
+    }
+
+    public void setLastPaidOn(Date lastPaidOn) {
+        this.lastPaidOn = lastPaidOn;
+    }
+}
+```
+
+* applicationContext.xml 파일 변경
+```
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="springSample.properties"/>
+    </bean>
+
+    <bean id="dataSource"
+          class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close"
+          p:driverClassName="${dataSource.driverClassName}"
+          p:url="${dataSource.url}"
+          p:username="${dataSource.username}"
+          p:password="${dataSource.password}"
+            />
+
+    <bean id="accountService"
+          class="spring.sample.service.AccountService">
+        <property name="accountDao" ref="accountDao"/>
+    </bean>
+
+    <bean id="accountDao"
+          class="spring.sample.dao.jdbc.JdbcAccountDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+        <property name="accountRowMapper" ref="accountRowMapper"/>
+    </bean>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="dataSource"/>
+    </bean>
+
+    <bean id="accountRowMapper" class="spring.sample.dao.jdbc.AccountRowMapper" />
+
+</beans>
+```
+
+* 만약 properties 경로를 파일 시스템 경로로 쓰고 싶은 경우 다음과 같이 쓸수 있음
+```
+<property name="location" value="file:${user.home}/springSample.properties/>
+```
+
+* AccountRowMapper 추가
+```
+package spring.sample.dao.jdbc;
+
+import org.springframework.jdbc.core.RowMapper;
+import spring.sample.model.Account;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class AccountRowMapper implements RowMapper<Account> {
+
+    @Override
+    public Account mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+        Account account = new Account();
+        account.setAccountNo(resultSet.getString("accountNo"));
+        account.setBalance(resultSet.getBigDecimal("balance"));
+        account.setLastPaidOn(resultSet.getDate("lastPaidOn"));
+        return account;
+    }
+}
+```
+
+* JdbcAccountDao 변경
+```
+package spring.sample.dao.jdbc;
+
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import spring.sample.dao.AccountDao;
+import spring.sample.model.Account;
+
+import java.util.List;
+
+public class JdbcAccountDao implements AccountDao {
+
+    private static final String FIND_ALL_SQL = "SELECT * FROM Account";
+
+    private NamedParameterJdbcOperations jdbcTemplate;
+
+    private AccountRowMapper accountRowMapper;
+
+    public void setJdbcTemplate(NamedParameterJdbcOperations jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public void setAccountRowMapper(AccountRowMapper accountRowMapper) {
+        this.accountRowMapper = accountRowMapper;
+    }
+
+    public List<Account> findAll() throws Exception {
+        return jdbcTemplate.query(FIND_ALL_SQL, accountRowMapper);
+    }
+
+}
+```
+
+* ConsoleApp 실행 후 결과 확인하기
+
+
+* Person class 만들기
+```
+package spring.sample.model;
+
+public class Person {
+
+    private String firstName;
+    private String lastName;
+
+    public Person() {
+    }
+
+    public Person(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+}
+```
+
+* bean 으로 등록하기. applicationContext.xml 파일에 추가
+```
+    <bean id="jaeyong" class="spring.sample.model.Person">
+        <constructor-arg value="Jaeyong" />
+        <constructor-arg value="Kim" />
+    </bean>
+
+    <bean id="yongsub" class="spring.sample.model.Person"
+          c:firstName="Yongsub"
+          c:lastName="Byun"
+            />
+
+    <bean id="minchan" class="spring.sample.model.Person"
+          c:_0="Minchan"
+          c:_1="Kim"
+            />
+
+    <bean id="yuri" class="spring.sample.model.Person"
+          p:firstName="Yuri"
+          p:lastName="Lee"
+            />
+```
+
+* ConsoleApp
+```
+```
 
 
 
 
 
+
+
+
+
+
+ scope="prototype"
