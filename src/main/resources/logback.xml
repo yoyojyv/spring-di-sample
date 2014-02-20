@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+  <!-- 기본 프로젝트, 개발자 로컬 PC용 설정 -->
+
+  <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+    <resetJUL>true</resetJUL>
+  </contextListener>
+
+  <!-- To enable JMX Management
+  <jmxConfigurator/>
+  -->
+
+  <!-- Appenders -->
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="dailyRollingOut" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!-- Support multiple-JVM writing to the same log file -->
+    <prudent>true</prudent>
+
+    <!--
+    <File>${user.home}/webappLog/logFile.log</File>
+    -->
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${user.home}/logs/mailplants-webapp/logFile.%d{yyyy-MM-dd-HHmm}.log</fileNamePattern>
+      <maxHistory>1000</maxHistory>
+    </rollingPolicy>
+
+    <encoder>
+      <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Application Loggers -->
+  <logger name="spring.sample" level="debug"/>
+
+  <!-- 3rdparty Loggers -->
+  <logger name="org.apache" level="error"/>
+
+  <logger name="org.hibernate" level="error"/>
+
+  <logger name="org.springframework">
+    <level value="info" />
+  </logger>
+
+  <logger name="org.springframework.core">
+    <level value="info" />
+  </logger>
+
+  <logger name="org.springframework.beans">
+    <level value="info" />
+  </logger>
+
+  <logger name="org.springframework.context">
+    <level value="info" />
+  </logger>
+
+  <logger name="org.springframework.web">
+    <level value="info" />
+  </logger>
+
+  <logger name="org.springframework.security">
+    <level value="info" />
+  </logger>
+
+  <root level="debug">
+    <appender-ref ref="console"/>
+    <!--
+    <appender-ref ref="dailyRollingOut"/>
+    -->
+  </root>
+
+</configuration>
