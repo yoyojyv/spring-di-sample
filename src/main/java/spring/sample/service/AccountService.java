@@ -1,6 +1,7 @@
 package spring.sample.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import spring.sample.dao.AccountDao;
 import spring.sample.model.Account;
 
@@ -10,6 +11,7 @@ import java.util.*;
 public class AccountService {
 
     @Autowired
+    @Qualifier("csvAccountDao")
     private AccountDao accountDao;
 
     public AccountService() {}

@@ -665,12 +665,41 @@ public class AccountService {
     <context:annotation-config/>
 ```
 
-* accountService 부분을 다음과 같이 변경
+* applicationContext.xml 파일에 accountService 부분을 다음과 같이 변경
 ```
     <bean id="accountService"
           class="spring.sample.service.AccountService" />
 ```
 
 * ConsoleApp 실행 후 결과 확인하기
+
+* 다음으로 applicationContext.xml 파일에 csvAccountDao 추가, csvAccountDao 의 id 를 jdbcAccountDao 로 변경
+```
+    <!-- accountDao 가 2개 -->
+    <bean id="csvAccountDao"
+          class="spring.sample.dao.csv.CsvAccountDao">
+    </bean>
+
+    <bean id="jdbcAccountDao"
+          class="spring.sample.dao.jdbc.JdbcAccountDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+        <property name="accountRowMapper" ref="accountRowMapper"/>
+    </bean>
+```
+* ConsoleApp 실행 후 결과 확인하기 -> Exception 발생.
+
+* Exception 해결하기
+AccountService 에서 @Autowired 부분에 @Qualifier("csvAccountDao") 추가
+```
+    @Autowired
+    @Qualifier("csvAccountDao")
+    private AccountDao accountDao;
+```
+
+* ConsoleApp 실행 후 결과 확인하기
+
+
+
+
 
 

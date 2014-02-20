@@ -27,14 +27,21 @@
 
     <bean id="accountService"
           class="spring.sample.service.AccountService">
-        <property name="accountDao" ref="accountDao"/>
     </bean>
 
-    <bean id="accountDao"
+
+    <!-- accountDao 가 2개 -->
+    <bean id="csvAccountDao"
+          class="spring.sample.dao.csv.CsvAccountDao">
+          <property name="csvResource" />
+    </bean>
+
+    <bean id="jdbcAccountDao"
           class="spring.sample.dao.jdbc.JdbcAccountDao">
         <property name="jdbcTemplate" ref="jdbcTemplate" />
         <property name="accountRowMapper" ref="accountRowMapper"/>
     </bean>
+
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
         <constructor-arg ref="dataSource"/>
