@@ -7,6 +7,7 @@ import spring.sample.dao.AccountDao;
 import spring.sample.model.Account;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.*;
 

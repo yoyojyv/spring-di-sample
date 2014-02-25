@@ -813,6 +813,82 @@ public class ConsoleJavaConfigApp {
 
 ```
 
+* 기존 accountService DI 적용을 위한 Java 설정파일인 AppConfig.java 파일을 만듬.
+```
+package spring.sample.config;
+
+import org.apache.commons.dbcp.BasicDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+
+import javax.sql.DataSource;
+
+@Configuration
+@PropertySource(value="classpath:springSample.properties")
+@ComponentScan("spring.sample")
+public class AppConfig {
+
+    @Autowired
+    Environment env;
+
+//    @Bean
+//    public DataSource dataSource() {
+//        BasicDataSource dataSource = new org.apache.commons.dbcp.BasicDataSource();
+//        dataSource.setUrl("jdbc:mysql://localhost:3306/spring_study_db?autoReconnect=true");
+//        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+//        dataSource.setUsername("root");
+//        dataSource.setPassword("1234");
+//
+//        return dataSource;
+//    }
+
+    @Bean
+    public DataSource dataSource() {
+        BasicDataSource dataSource = new org.apache.commons.dbcp.BasicDataSource();
+        dataSource.setUrl(env.getProperty("dataSource.url"));
+        dataSource.setDriverClassName(env.getProperty("dataSource.driverClassName"));
+        dataSource.setUsername(env.getProperty("dataSource.username"));
+        dataSource.setPassword(env.getProperty("dataSource.password"));
+
+        return dataSource;
+    }
+
+    @Bean
+    public NamedParameterJdbcTemplate jdbcTemplate() {
+        return new NamedParameterJdbcTemplate(dataSource());
+    }
+
+
+}
+```
+
+* ConsoleJavaConfigApp 에서 ApplicationContext 에 AppConfig.class 설정 추가, accountService 를 불러와 테스트 해보기
+```
+    ...
+    ...
+
+    ApplicationContext ctx = new AnnotationConfigApplicationContext(PersonConfig.class, AppConfig.class);
+
+    ...
+    ...
+
+
+    AccountService accountService = ctx.getBean("accountService",  AccountService.class);
+    List<Account> delinquentAccounts = accountService.findDeliquentAccounts();
+
+    for (Account a : delinquentAccounts) {
+        logger.debug("delinquentAccount : " + a.getAccountNo());
+    }
+
+```
+
+* 이상없이 동작하는지 확인하기
+
 
 
 
